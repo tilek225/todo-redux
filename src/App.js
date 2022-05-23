@@ -1,36 +1,43 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { addUser, deleteUser, deleteAllUsers } from './redux/reducers/users'
+import { addTask, deleteTask, deleteAllTasks } from './redux/reducers/tasks'
+import './style.css'
 
 function App() {
 
   const dispatch = useDispatch()
-  const users = useSelector((store) => store.users.users);
-  const usersCount = useSelector(store => store.users.usersCount)
+  const tasks = useSelector((store) => store.tasks.tasks);
+  const tasksCount = useSelector(store => store.tasks.tasksCount)
 
   return (
     <div className="App">
-      <h2>Количество юзеров - {usersCount}</h2>
-      <button onClick={dispatch(deleteAllUsers())}>Удалить все</button>
-      <ul>
-        {users.map(item => (
-          <li key={item.id}>
-            <button type='button'>copy</button>
-            {item.name}
-            {/* <button type="button" onClick={() => dispatch(deleteUser(item.id))}>Delete</button> */}
+      <header>Todo App</header>
+      <form onSubmit={(event) => {
+        event.preventDefault();
+        dispatch(addTask(event.target[0].value))
+        event.target[0].value = ''
+        event.target[1].value = ''
+      }} className="form">
+        <input required placeholder="tasks" type='text' className='form__input' />
+        <button type='submit' className='form__btn'>+</button>
+      </form>
+
+      <ul className='list'>
+        {tasks.map(item => (
+          <li key={item.id} className="list__item">
+            <button type='button' className='list__btn'>copy</button>
+            {item.title}
+            <button className='list__btn' type="button" onClick={() => dispatch(deleteTask(item.id))}>Delete</button>
           </li>
         ))}
       </ul>
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        dispatch(addUser(event.target[0].value, event.target[1].value))
-        event.target[0].value = ''
-        event.target[1].value = ''
-      }}>
-        <input placeholder="name" type='text' />
-        <input placeholder="age" type='number' />
-        <button type='submit'>Add</button>
-      </form>
+      <div className='footer'>
+        <button className='footer__btn' onClick={() => dispatch(deleteAllTasks())}>Удалить все</button>
+        <h3>Количество тасков - {tasksCount}</h3>
+      </div>
+
+
+
     </div>
   );
 }

@@ -1,17 +1,15 @@
 const initialState = {
-    users: [
+    tasks: [
         {
-            name: 'Amir',
-            age: 15,
+            title: 'go to market',
             id: 1
         },
         {
-            name: 'Tilek',
-            age: 35,
+            title: 'buy bread',
             id: 2
         }
     ],
-    usersCount: 2
+    tasksCount: 2
 }
 
 export default (state = initialState, action) => {
@@ -19,18 +17,17 @@ export default (state = initialState, action) => {
         case 'ADD': {
             return {
                 ...state,
-                users: [...state.users, {
-                    name: action.name,
-                    age: action.age,
-                    id: state.users[state.users.length - 1].id + 1
+                tasks: [...state.tasks, {
+                    title: action.title,
+                    id: state.tasks[state.tasks.length - 1].id + 1
                 }],
-                usersCount: state.usersCount + 1
+                tasksCount: state.tasksCount + 1
             }
         }
         case 'DELETE': {
             return {
                 ...state,
-                users: [...state.users].filter(item => {
+                tasks: [...state.tasks].filter(item => {
                     return item.id !== action.id
                 })
             }
@@ -38,36 +35,33 @@ export default (state = initialState, action) => {
         case 'DELETEALL': {
             return {
                 ...state,
-                users: [],
-                usersCount: 0
+                tasks: [],
+                tasksCount: 0
             }
-        }
-        case 'COPY': {
-
         }
         default: return state
     }
 }
 
-export const addUser = (name, age) => {
+export const addTask = (title) => {
     return (dispatch) => {
-        return dispatch({ type: 'ADD', name, age })
+        return dispatch({ type: 'ADD', title })
     }
 }
 
-export const deleteUser = (id) => {
+export const deleteTask = (id) => {
     return (dispatch) => {
         dispatch({ type: 'DELETE', id })
     }
 }
 
-export const deleteAllUsers = () => {
+export const deleteAllTasks = () => {
     return (dispatch) => {
         dispatch({ type: 'DELETEALL' })
     }
 }
 
-export const copyUser = (id) => {
+export const copyTask = (id) => {
     return (dispatch) => {
         return dispatch({ type: 'COPY', id })
     }
