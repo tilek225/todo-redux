@@ -2,11 +2,17 @@ const initialState = {
     tasks: [
         {
             title: 'go to market',
-            id: 1
+            id: 1,
+            change: false,
+            isDone: false,
+            isImportant: false
         },
         {
             title: 'buy bread',
-            id: 2
+            id: 2,
+            change: false,
+            isDone: false,
+            isImportant: false
         }
     ],
     tasksCount: 2
@@ -39,6 +45,54 @@ export default (state = initialState, action) => {
                 tasksCount: 0
             }
         }
+        case 'EDIT': {
+            return {
+                ...state,
+                tasks: state.tasks.map(item => {
+                    if (item.id === action.id) {
+                        return { ...item, title: action.title, change: !item.change }
+                    } else {
+                        return item
+                    }
+                })
+            }
+        }
+        case 'EDIT2': {
+            return {
+                ...state,
+                tasks: state.tasks.map(item => {
+                    if (item.id === action.id) {
+                        return { ...item, change: !item.change }
+                    } else {
+                        return item
+                    }
+                })
+            }
+        }
+        case 'DONE': {
+            return {
+                ...state,
+                tasks: state.tasks.map(item => {
+                    if (item.id === action.id) {
+                        return { ...item, isDone: !item.isDone }
+                    } else {
+                        return item
+                    }
+                })
+            }
+        }
+        case 'IMPORTANT': {
+            return {
+                ...state,
+                tasks: state.tasks.map(item => {
+                    if (item.id === action.id) {
+                        return { ...item, isImportant: !item.isImportant }
+                    } else {
+                        return item
+                    }
+                })
+            }
+        }
         default: return state
     }
 }
@@ -61,8 +115,24 @@ export const deleteAllTasks = () => {
     }
 }
 
-export const copyTask = (id) => {
+export const editTask = (title, id, change) => {
     return (dispatch) => {
-        return dispatch({ type: 'COPY', id })
+        if (change) {
+            return dispatch({ type: 'EDIT', title, id })
+        } else {
+            return dispatch({ type: 'EDIT2', id })
+        }
+    }
+}
+
+export const doneTask = (id) => {
+    return (dispatch) => {
+        return dispatch({ type: 'DONE', id })
+    }
+}
+
+export const importantTask = (id) => {
+    return (dispatch) => {
+        return dispatch({ type: 'IMPORTANT', id })
     }
 }
